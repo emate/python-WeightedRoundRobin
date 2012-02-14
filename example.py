@@ -19,8 +19,13 @@ for i in range(0, 100):
     print "Choose is : %s"%choose[0]
     result.append(choose[0])
 
-
 unique_set = Set(result)
 for res in unique_set:
     print "%s: %s counts"%(res, result.count(res))
- 
+
+# alternative method of fetching 100 schedule decisions ahead
+result_alt = sched.get_next(100)
+
+unique_set = Set(result_alt)
+for res in unique_set:
+    print "%s: %s counts"%(res, result_alt.count(res))

@@ -14,12 +14,13 @@ class WRRScheduler():
     max_s = None
     gcd_s = None
     len_s = None
+    counter = {}
 
     def __init__(self, s = None):
-        self.data_set = s
         self._init_dataset(s)
 
     def _init_dataset(self, s):
+        self.data_set = s
         self.max_s = max(s, key=lambda x: x[1])[1]
         self.gcd_s = reduce(fractions.gcd, [ weight for data, weight in s])
         self.len_s = len(s)
@@ -34,11 +35,21 @@ class WRRScheduler():
                     if self.cw == 0:
                         return None
             if self.data_set[self.i][1] >= self.cw:
+                self._inc_counter(self.data_set[self.i]) 
                 return self.data_set[self.i]
 
+    def _inc_counter(self, item):
+        try:
+            self.counter[item[0]] += 1
+        except KeyError:
+            self.counter[item[0]] = 1
+
     def set_data(self, s):
-        self._init_dataset(s)
         self.reset()
+        self._init_dataset(s)
+
+    def reset_counter(self):
+        self.counter = {}
 
     def reset(self):             
         self.cw = 0
@@ -47,6 +58,7 @@ class WRRScheduler():
         self.max_s = None
         self.gcd_s = None
         self.len_s = None
+        self.reset_counter()
 
     def get_next(self, n = 1):
         if n > 1:
